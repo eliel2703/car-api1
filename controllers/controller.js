@@ -1,11 +1,6 @@
 const { carsCollection } = require('../config/firebase');
-const { populateInitialData } = require('../data/data');
 
-// Inicializar dados (opcional)
-populateInitialData(carsCollection);
-
-// Criar um novo carro
-const createCar = async (req, res) => {
+const criarCarro = async (req, res) => {
   try {
     const { marca, modelo, ano, cor, preco, placa } = req.body;
     
@@ -38,8 +33,7 @@ const createCar = async (req, res) => {
   }
 };
 
-// Buscar todos os carros
-const getAllCars = async (req, res) => {
+const buscarAllCarros = async (req, res) => {
   try {
     const snapshot = await carsCollection.get();
     const cars = [];
@@ -57,27 +51,7 @@ const getAllCars = async (req, res) => {
   }
 };
 
-// Buscar carro por ID
-const getCarById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const doc = await carsCollection.doc(id).get();
-    
-    if (!doc.exists) {
-      return res.status(404).json({ error: 'Carro não encontrado' });
-    }
-
-    res.json({
-      id: doc.id,
-      ...doc.data()
-    });
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao buscar carro: ' + error.message });
-  }
-};
-
-// Atualizar carro
-const updateCar = async (req, res) => {
+const atualizarCarro = async (req, res) => {
   try {
     const { id } = req.params;
     const { marca, modelo, ano, cor, preco, placa } = req.body;
@@ -110,8 +84,7 @@ const updateCar = async (req, res) => {
   }
 };
 
-// Deletar carro
-const deleteCar = async (req, res) => {
+const deletarCarro = async (req, res) => {
   try {
     const { id } = req.params;
     const doc = await carsCollection.doc(id).get();
@@ -128,52 +101,9 @@ const deleteCar = async (req, res) => {
   }
 };
 
-// Buscar carros por marca
-const getCarsByBrand = async (req, res) => {
-  try {
-    const { marca } = req.params;
-    const snapshot = await carsCollection.where('marca', '==', marca).get();
-    
-    const cars = [];
-    snapshot.forEach(doc => {
-      cars.push({
-        id: doc.id,
-        ...doc.data()
-      });
-    });
-
-    res.json(cars);
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao buscar carros por marca: ' + error.message });
-  }
-};
-
-// Buscar carros por ano
-const getCarsByYear = async (req, res) => {
-  try {
-    const { ano } = req.params;
-    const snapshot = await carsCollection.where('ano', '==', Number(ano)).get();
-    
-    const cars = [];
-    snapshot.forEach(doc => {
-      cars.push({
-        id: doc.id,
-        ...doc.data()
-      });
-    });
-
-    res.json(cars);
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao buscar carros por ano: ' + error.message });
-  }
-};
-
 module.exports = {
-  createCar,
-  getAllCars,
-  getCarById,
-  updateCar,
-  deleteCar,
-  getCarsByBrand,
-  getCarsByYear
+  criarCarro,
+  buscarAllCarros,
+  atualizarCarro,
+  deletarCarro
 };
