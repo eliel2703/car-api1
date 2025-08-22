@@ -1,4 +1,4 @@
-const { carsCollection } = require('../config/firebase');
+const { carsCollection } = require('../config/firebase.js');
 
 const criarCarro = async (req, res) => {
   try {

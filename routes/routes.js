@@ -5,7 +5,7 @@ const {
   buscarAllCarros,
   atualizarCarro,
   deletarCarro
-} = require('../controllers/controller');
+} = require('../controllers/controller.js');
 
 router.post('/cars', criarCarro);
 router.get('/cars', buscarAllCarros);
